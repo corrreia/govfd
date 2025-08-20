@@ -1,12 +1,13 @@
 package epson
 
 import (
-	"vfd/vfd/commands/escpos"
+	"github.com/corrreia/govfd/types"
 
 	"go.bug.st/serial"
 )
 
 // DMD110Spec contains the specification for the Epson DM-D110.
+// Note: Charset selection is now fully automatic - no need to specify!
 var DMD110Spec = struct {
 	Name                 string
 	Manufacturer         string
@@ -23,7 +24,6 @@ var DMD110Spec = struct {
 	SupportsCursorBlink  bool
 	SupportsCharsetTable bool
 	SupportsSelfTest     bool
-	DefaultCharset       int
 	DocumentationURL     string
 }{
 	Name:                 "Epson DM-D110",
@@ -35,12 +35,11 @@ var DMD110Spec = struct {
 	DefaultDataBits:      8,
 	DefaultParity:        serial.NoParity,
 	DefaultStopBits:      serial.OneStopBit,
-	CommandProtocol:      "ESC_POS", // This will be converted to CommandProtocolName
+	CommandProtocol:      types.ProtocolESCPOS,
 	SupportsBrightness:   true,
 	BrightnessLevels:     4,
 	SupportsCursorBlink:  true,
-	SupportsCharsetTable: true,
+	SupportsCharsetTable: true, // But handled automatically!
 	SupportsSelfTest:     true,
-	DefaultCharset:       escpos.CharsetPC437,
 	DocumentationURL:     "https://download4.epson.biz/sec_pubs/pos/reference_en/escpos_dm/commands.html",
 }

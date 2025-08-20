@@ -1,6 +1,6 @@
 package escpos
 
-// ESCPOSProtocol implements the CommandProtocol interface for ESC/POS displays.
+// ESCPOSProtocol implements the Protocol interface for ESC/POS displays.
 type ESCPOSProtocol struct{}
 
 // GetName returns the protocol name.

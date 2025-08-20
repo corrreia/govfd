@@ -1,4 +1,4 @@
-package vfd
+package govfd
 
 import "errors"
 
@@ -22,10 +22,10 @@ func (d *Display) SetCursor(column, row int) error {
 	}
 	d.cursorColumn = column
 	d.cursorRow = row
-	if d.commandProfile == nil || d.commandProfile.Protocol == nil {
-		return errors.New("no command profile set")
+	if d.protocol == nil {
+		return errors.New("no command protocol set")
 	}
-	cmd := d.commandProfile.Protocol.MoveCursor(column, row)
+	cmd := d.protocol.MoveCursor(column, row)
 	if cmd == nil {
 		return errors.New("invalid cursor position for this protocol")
 	}

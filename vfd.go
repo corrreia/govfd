@@ -1,34 +1,26 @@
-package vfd
+package govfd
 
 import (
 	"errors"
 
+	"github.com/corrreia/govfd/commands/escpos"
+	"github.com/corrreia/govfd/types"
+
 	"go.bug.st/serial"
 )
 
-// Options configures serial connection parameters for the VFD display.
-type Options struct {
-	BaudRate int
-	DataBits int
-	Parity   serial.Parity
-	StopBits serial.StopBits
-	// Optional logical screen size for bounds validation.
-	// If zero, bounds are not enforced beyond device limits (1..255).
-	Columns int
-	Rows    int
-}
-
 // Display represents an open connection to a VFD display over a serial port.
 type Display struct {
-	port           serial.Port
-	portName       string
-	columns        int
-	rows           int
-	cursorColumn   int
-	cursorRow      int
-	brightness     int
-	blinkMs        int
-	commandProfile *CommandProfile // Command set for this display
+	port         serial.Port
+	portName     string
+	columns      int
+	rows         int
+	cursorColumn int
+	cursorRow    int
+	brightness   int
+	blinkMs      int
+	protocol     Protocol               // Command protocol for this display
+	encoder      *escpos.CharsetEncoder // Character encoding handler
 }
 
 // DefaultOptions returns commonly used defaults (9600 8N1).
@@ -44,7 +36,7 @@ func DefaultOptions() *Options {
 // OpenModel establishes a connection to a VFD using model-specific defaults.
 // This is the recommended way to open a VFD display as it automatically
 // configures the correct serial settings and dimensions for the specified model.
-func OpenModel(portName string, model Model) (*Display, error) {
+func OpenModel(portName string, model types.Model) (*Display, error) {
 	if portName == "" {
 		return nil, errors.New("portName is required")
 	}
@@ -60,12 +52,15 @@ func OpenModel(portName string, model Model) (*Display, error) {
 		return nil, err
 	}
 
-	// Set the command profile for this model
-	commandProfile, exists := GetCommandProfile(modelProfile.CommandProtocol)
+	// Set the command protocol for this model
+	protocol, exists := GetProtocol(modelProfile.CommandProtocol)
 	if !exists {
-		return nil, errors.New("unsupported command protocol: " + string(modelProfile.CommandProtocol))
+		return nil, errors.New("unsupported command protocol: " + modelProfile.CommandProtocol)
 	}
-	display.commandProfile = commandProfile
+	display.protocol = protocol
+
+	// Initialize character encoding
+	display.encoder = escpos.NewCharsetEncoder()
 
 	return display, nil
 }
@@ -73,7 +68,7 @@ func OpenModel(portName string, model Model) (*Display, error) {
 // OpenModelWithOptions establishes a connection to a VFD using model defaults
 // but allows overriding specific options. Model defaults are used for any
 // options that are not explicitly set (zero values) in the provided opts.
-func OpenModelWithOptions(portName string, model Model, opts *Options) (*Display, error) {
+func OpenModelWithOptions(portName string, model types.Model, opts *Options) (*Display, error) {
 	if portName == "" {
 		return nil, errors.New("portName is required")
 	}
@@ -115,12 +110,15 @@ func OpenModelWithOptions(portName string, model Model, opts *Options) (*Display
 		return nil, err
 	}
 
-	// Set the command profile for this model
-	commandProfile, exists := GetCommandProfile(modelProfile.CommandProtocol)
+	// Set the command protocol for this model
+	protocol, exists := GetProtocol(modelProfile.CommandProtocol)
 	if !exists {
-		return nil, errors.New("unsupported command protocol: " + string(modelProfile.CommandProtocol))
+		return nil, errors.New("unsupported command protocol: " + modelProfile.CommandProtocol)
 	}
-	display.commandProfile = commandProfile
+	display.protocol = protocol
+
+	// Initialize character encoding
+	display.encoder = escpos.NewCharsetEncoder()
 
 	return display, nil
 }
@@ -158,10 +156,13 @@ func Open(portName string, opts *Options) (*Display, error) {
 		d.rows = opts.Rows
 	}
 
-	// Set default command profile (ESC/POS) for manual connections
-	if commandProfile, exists := GetCommandProfile(ProtocolESCPOS); exists {
-		d.commandProfile = commandProfile
+	// Set default command protocol (ESC/POS) for manual connections
+	if protocol, exists := GetProtocol(types.ProtocolESCPOS); exists {
+		d.protocol = protocol
 	}
+
+	// Initialize character encoding
+	d.encoder = escpos.NewCharsetEncoder()
 
 	return d, nil
 }
