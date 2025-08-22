@@ -14,7 +14,7 @@
 
 ### 🧠 **Smart Latin Encoding**
 
-- **🎉 ZERO charset configuration** - just send UTF-8 text!
+- **🎉 ZERO charset configuration** - just send UTF-8 text! (no emoji support for obvious reasons)
 - **🔍 Automatic character set detection** for Latin scripts
 - **🌍 Latin language support** - Portuguese, Spanish, French, German, Italian
 - **⚡ Optimized performance** - focused on what actually works
