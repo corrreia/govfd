@@ -1,12 +1,9 @@
 # 🚀 GoVFD - Smart VFD Display Library for Go
 
+![GoVFD Demo](image.jpg)
+
 [![Go Version](https://img.shields.io/badge/Go-1.21+-blue.svg)](https://golang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](https://github.com/corrreia/govfd)
-
-**Advanced VFD (Vacuum Fluorescent Display) library for Go with Smart Latin Character Encoding!**
-
-✨ **Just send Latin UTF-8 text and it works perfectly - no charset management needed!**
 
 ---
 
