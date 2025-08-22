@@ -1,3 +1,20 @@
+// Package govfd provides a smart VFD (Vacuum Fluorescent Display) library for Go
+// with automatic Latin character encoding. Just send UTF-8 text and it works perfectly!
+//
+// Features:
+//   - Smart Latin character encoding (Portuguese, Spanish, French, German, Italian)
+//   - Automatic charset detection and hardware switching
+//   - Model-based architecture with automatic configuration
+//   - ESC/POS protocol support
+//   - Easy-to-use API with zero configuration needed
+//
+// Example:
+//
+//	display, err := govfd.OpenModel("COM3", types.ModelEpsonDMD110)
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	display.WriteText("Café")  // Works perfectly!
 package govfd
 
 import (
