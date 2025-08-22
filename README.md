@@ -62,7 +62,7 @@ display.WriteText("Müller")        // ✨ Perfect German!
 ┌─────────────────────────────────────────────────────────────┐
 │                  🧠 SMART LATIN ENCODING                    │
 ├─────────────────────────────────────────────────────────────┤
-│    Input: Latin UTF-8 Text ("Café", "ação", "€uro")        │
+│    Input: Latin UTF-8 Text ("Café", "ação", "€uro")         │
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
@@ -72,11 +72,11 @@ display.WriteText("Müller")        // ✨ Perfect German!
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
-│         🎯 STEP 2: Auto-Detect Best Charset                 │
-│  • Portuguese chars (ã,ç,õ) → CP860                        │
-│  • Euro symbol (€)          → CP858                        │
-│  • General Latin (é,ñ,ü,ö)  → CP850                        │
-│  • Default fallback         → CP437                        │
+│         🎯 STEP 2: Auto-Detect Best Charset                │
+│  • Portuguese chars (ã,ç,õ) → CP860                         │
+│  • Euro symbol (€)          → CP858                         │
+│  • General Latin (é,ñ,ü,ö)  → CP850                         │
+│  • Default fallback         → CP437                         │
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
@@ -284,7 +284,7 @@ display.Close()
 
 ```go
 // Smart encoding (recommended)
-err := display.WriteText("Any UTF-8 text! 🌍")
+err := display.WriteText("Any UTF-8 text!")
 
 // Raw bytes (advanced)
 err := display.WriteRawBytes([]byte{0x48, 0x65, 0x6C, 0x6C, 0x6F})
@@ -294,7 +294,7 @@ err := display.WriteRawBytes([]byte{0x48, 0x65, 0x6C, 0x6C, 0x6F})
 
 ```go
 // Positioning
-err := display.SetCursor(column, row)  // 1-based
+err := display.SetCursor(column, row)  // 1-based (starts @ 1, not 0)
 col, row := display.GetCursor()
 
 // Screen control
@@ -331,79 +331,6 @@ protocols := govfd.GetSupportedProtocols()
 
 ---
 
-## 🧪 **Character Encoding Test Suite**
-
-### 🌍 **Unicode Test Examples**
-
-```go
-package main
-
-import (
-    "fmt"
-    "github.com/corrreia/govfd"
-    "github.com/corrreia/govfd/types"
-)
-
-func main() {
-    display, _ := govfd.OpenModel("COM3", types.ModelEpsonDMD110)
-    defer display.Close()
-
-    tests := []struct {
-        name string
-        text string
-        note string
-    }{
-        {"Portuguese", "São Paulo, ação", "Auto-detects CP860"},
-        {"French", "Café, crème, naïve", "Auto-selects CP850"},
-        {"German", "Müller, größe", "Works with umlauts"},
-        {"Italian", "città, università", "Italian accents"},
-        {"Euro", "€19.99", "Euro symbol → CP858"},
-    }
-
-    for i, test := range tests {
-        display.SetCursor(1, (i%2)+1)
-        display.WriteText(test.text)
-        fmt.Printf("✅ %s: '%s' - %s\n", test.name, test.text, test.note)
-
-        if i%2 == 1 {
-            time.Sleep(2 * time.Second)
-            display.Clear()
-        }
-    }
-}
-```
-
----
-
-## 🔧 **Troubleshooting**
-
-### 🔍 **Common Issues**
-
-| Problem               | Solution                                              |
-| --------------------- | ----------------------------------------------------- |
-| **Nothing appears**   | Check COM port, cable, power                          |
-| **Garbled text**      | ✅ **Should not happen!** Smart encoding handles this |
-| **Wrong port**        | Check Device Manager (Windows)                        |
-| **Permission denied** | Run as administrator (Windows)                        |
-
-### 🆘 **Debug Information**
-
-```go
-// Check model configuration
-if profile, exists := govfd.GetModelProfile(types.ModelEpsonDMD110); exists {
-    fmt.Printf("Model: %s\n", profile.Name)
-    fmt.Printf("Dimensions: %dx%d\n", profile.Columns, profile.Rows)
-    fmt.Printf("Baud Rate: %d\n", profile.DefaultBaudRate)
-    fmt.Printf("Protocol: %s\n", profile.CommandProtocol)
-}
-
-// Verify display dimensions
-cols, rows := display.Dimensions()
-fmt.Printf("Display size: %d columns × %d rows\n", cols, rows)
-```
-
----
-
 ## 🏗️ **Architecture & Extending**
 
 ### 📦 **Project Structure**
@@ -411,7 +338,7 @@ fmt.Printf("Display size: %d columns × %d rows\n", cols, rows)
 ```
 govfd/
 ├── 📁 commands/escpos/     # ESC/POS protocol implementation
-│   ├── encoding.go         # 🧠 Smart encoding system
+│   ├── encoding.go         # 🧠 Smart encoding system :)
 │   ├── commands.go         # Command implementations
 │   ├── chartable.go        # Character set constants
 │   └── consts.go          # ESC/POS constants
@@ -448,6 +375,8 @@ var modelRegistry = map[types.Model]*ModelProfile{
 
 ### 🔧 **Custom Command Protocols**
 
+Custom protocols dontr need to work only via serial, need to think better how i will implement that.
+
 ```go
 // Implement the Protocol interface
 type MyProtocol struct{}
@@ -477,6 +406,7 @@ We welcome contributions! Here's how to help:
 3. Commit changes (`git commit -m 'Add amazing feature'`)
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
+6. Huge Thanks! Its really hard come by new VFD's
 
 ### 📋 **Development Setup**
 
@@ -496,22 +426,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 **Acknowledgments**
-
-- **golang.org/x/text** - Comprehensive character encoding support
-- **go.bug.st/serial** - Cross-platform serial port library
-- The VFD hardware community for documentation and testing
-
----
-
-## ⭐ **Star History**
-
-If this library helps you, please consider giving it a star! ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=corrreia/govfd&type=Date)](https://star-history.com/#corrreia/govfd&Date)
-
----
-
 <div align="center">
 
 ### 🚀 **Made with ❤️ for the Go community**
@@ -519,9 +433,5 @@ If this library helps you, please consider giving it a star! ⭐
 **[📖 Documentation](https://pkg.go.dev/github.com/corrreia/govfd)** •
 **[🐛 Issues](https://github.com/corrreia/govfd/issues)** •
 **[💬 Discussions](https://github.com/corrreia/govfd/discussions)**
-
----
-
-**✨ Zero-configuration character encoding • 🌍 Universal Unicode support • 🎯 Smart auto-detection**
 
 </div>
