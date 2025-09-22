@@ -41,7 +41,7 @@ rawBytes := []byte{0x43, 0x61, 0x66, 0xE9}  // Manual encoding
 display.WriteRawBytes(rawBytes)    // Hope it works...
 ```
 
-### With GoVFD (The New Way) 🎉
+### With GoVFD (The New Way) 
 
 ```go
 // Just works! Zero configuration!
@@ -311,7 +311,7 @@ err := display.SetBlink(intervalMs)  // 0 = off
 interval := display.GetBlinkMs()
 ```
 
-### ℹ **Information & Diagnostics**
+### **Information & Diagnostics**
 
 ```go
 // Display info
@@ -335,7 +335,7 @@ protocols := govfd.GetSupportedProtocols()
 ```
 govfd/
 ├──  commands/escpos/       # ESC/POS protocol implementation
-│   ├── encoding.go         # 🧠 Smart encoding system :)
+│   ├── encoding.go         # Smart encoding system :)
 │   ├── commands.go         # Command implementations
 │   ├── chartable.go        # Character set constants
 │   └── consts.go           # ESC/POS constants
