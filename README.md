@@ -1,4 +1,4 @@
-# 🚀 GoVFD - Smart VFD Display Library for Go
+#  GoVFD - Smart VFD Display Library for Go
 
 ![GoVFD Demo](image.jpg)
 
@@ -7,22 +7,22 @@
 
 ---
 
-## 🎯 **Key Features**
+##  **Key Features**
 
-### 🧠 **Smart Latin Encoding**
+###  **Smart Latin Encoding**
 
-- **🎉 ZERO charset configuration** - just send UTF-8 text! (no emoji support for obvious reasons)
-- **🔍 Automatic character set detection** for Latin scripts
-- **🌍 Latin language support** - Portuguese, Spanish, French, German, Italian
-- **⚡ Optimized performance** - focused on what actually works
+- ** ZERO charset configuration** - just send UTF-8 text! (no emoji support for obvious reasons)
+- ** Automatic character set detection** for Latin scripts
+- ** Latin language support** - Portuguese, Spanish, French, German, Italian
+- ** Optimized performance** - focused on what actually works
 
-### 🏭 **Model-Based Architecture**
+###  **Model-Based Architecture**
 
-- **⚙️ Automatic setup** for supported VFD models
-- **📱 Multiple command protocols** (ESC/POS, custom protocols)
-- **🔧 Easy extensibility** for new models
+- ** Automatic setup** for supported VFD models
+- ** Multiple command protocols** (ESC/POS, custom protocols)
+- ** Easy extensibility** for new models
 
-### 🎛️ **Complete Control**
+###  **Complete Control**
 
 - Cursor positioning, brightness, blinking
 - Form feed, clear screen, self-test
@@ -30,9 +30,9 @@
 
 ---
 
-## 🌟 **The Magic in Action**
+##  **The Magic in Action**
 
-### Before GoVFD (The Old Way) 😞
+### Before GoVFD (The Old Way) 
 
 ```go
 // Manual charset management nightmare!
@@ -45,31 +45,31 @@ display.WriteRawBytes(rawBytes)    // Hope it works...
 
 ```go
 // Just works! Zero configuration!
-display.WriteText("Café")          // ✨ Perfect French!
-display.WriteText("ação")          // ✨ Perfect Portuguese!
-display.WriteText("niño")          // ✨ Perfect Spanish!
-display.WriteText("Müller")        // ✨ Perfect German!
+display.WriteText("Café")          //  Perfect French!
+display.WriteText("ação")          //  Perfect Portuguese!
+display.WriteText("niño")          //  Perfect Spanish!
+display.WriteText("Müller")        //  Perfect German!
 ```
 
 ---
 
-## 📊 **Smart Latin Encoding System**
+##  **Smart Latin Encoding System**
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                  🧠 SMART LATIN ENCODING                    │
+│                     SMART LATIN ENCODING                    │
 ├─────────────────────────────────────────────────────────────┤
 │    Input: Latin UTF-8 Text ("Café", "ação", "€uro")         │
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
-│              🔍 STEP 1: Try Current Charset                 │
-│  ✅ Success? → Send to display immediately                  │
-│  ❌ Failed?  → Continue to detection...                     │
+│                 STEP 1: Try Current Charset                 │
+│     Success? → Send to display immediately                  │
+│     Failed?  → Continue to detection...                     │
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
-│         🎯 STEP 2: Auto-Detect Best Charset                │
+│             STEP 2: Auto-Detect Best Charset                │
 │  • Portuguese chars (ã,ç,õ) → CP860                         │
 │  • Euro symbol (€)          → CP858                         │
 │  • General Latin (é,ñ,ü,ö)  → CP850                         │
@@ -77,21 +77,21 @@ display.WriteText("Müller")        // ✨ Perfect German!
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
-│          ⚡ STEP 3: Hardware Charset Switching              │
+│             STEP 3: Hardware Charset Switching              │
 │  Automatically sends ESC commands to switch display charset │
-│  ✅ Success? → Perfect native encoding!                     │
-│  ❌ Failed?  → Use as-is (ASCII safe)                       │
+│     Success? → Perfect native encoding!                     │
+│     Failed?  → Use as-is (ASCII safe)                       │
 └─────────────────────┬───────────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────────┐
-│                  📺 Perfect Display Output                  │
-│           Latin characters display correctly! 🎉            │
+│                     Perfect Display Output                  │
+│           Latin characters display correctly!               │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🚀 **Installation**
+##  **Installation**
 
 ```bash
 go get github.com/corrreia/govfd
@@ -99,9 +99,9 @@ go get github.com/corrreia/govfd
 
 ---
 
-## 📖 **Quick Start Guide**
+##  **Quick Start Guide**
 
-### 🎯 **Basic Usage (Recommended)**
+###  **Basic Usage (Recommended)**
 
 ```go
 package main
@@ -120,7 +120,7 @@ func main() {
     }
     defer display.Close()
 
-    // ✨ Just send text - encoding is automatic!
+    //  Just send text - encoding is automatic!
     display.Clear()
     display.SetCursor(1, 1)
     display.WriteText("Café français")  // Perfect accents!
@@ -128,13 +128,13 @@ func main() {
     display.SetCursor(1, 2)
     display.WriteText("ação €uro")      // Portuguese + Euro symbol!
 
-    // 🎛️ Other controls work as expected
+    //  Other controls work as expected
     display.SetBrightness(3)
     display.SetBlink(500) // Blink every 500ms
 }
 ```
 
-### 🌍 **Latin Character Examples**
+###  **Latin Character Examples**
 
 ```go
 // 🇵🇹 Portuguese
@@ -152,33 +152,33 @@ display.WriteText("Müller, Zürich, größe")
 // 🇮🇹 Italian
 display.WriteText("città, università, così")
 
-// 💰 Euro symbol
+//  Euro symbol
 display.WriteText("€19.99")
 ```
 
 ---
 
-## 🏭 **Supported Hardware**
+##  **Supported Hardware**
 
-### 📺 **VFD Models**
+###  **VFD Models**
 
 | Model                 | Dimensions | Baud Rate | Protocol | Auto-Config |
 | --------------------- | ---------- | --------- | -------- | ----------- |
-| **Epson DM-D110**     | 20×2       | 9600      | ESC/POS  | ✅          |
+| **Epson DM-D110**     | 20×2       | 9600      | ESC/POS  | Active      |
 | _(More coming soon!)_ |            |           |          |             |
 
 ### 🔌 **Command Protocols**
 
 | Protocol             | Description              | Character Sets | Status    |
 | -------------------- | ------------------------ | -------------- | --------- |
-| **ESC/POS**          | Standard ESC/POS for VFD | Latin charsets | ✅ Active |
-| _(Custom protocols)_ | Extensible architecture  |                | 🔄 Future |
+| **ESC/POS**          | Standard ESC/POS for VFD | Latin charsets |    Active |
+| _(Custom protocols)_ | Extensible architecture  |                |    Future |
 
 ---
 
-## 🛠️ **Advanced Usage**
+##  **Advanced Usage**
 
-### ⚙️ **Custom Configuration**
+###  **Custom Configuration**
 
 ```go
 // Override model defaults
@@ -200,7 +200,7 @@ opts := &govfd.Options{
 display, err := govfd.Open("COM3", opts)
 ```
 
-### 🎛️ **Display Controls**
+###  **Display Controls**
 
 ```go
 // Screen management
@@ -223,7 +223,7 @@ brightness := display.GetBrightness()
 display.SelfTest()        // Execute hardware self-test
 ```
 
-### 🔧 **Raw Access (Advanced Users)**
+###  **Raw Access (Advanced Users)**
 
 ```go
 // Send raw bytes (bypasses smart encoding)
@@ -235,7 +235,7 @@ display.WriteRawBytes(rawData)
 
 ---
 
-## 🎮 **Interactive CLI Demo**
+##  **Interactive CLI Demo**
 
 Try the interactive command-line interface to test all features:
 
@@ -243,7 +243,7 @@ Try the interactive command-line interface to test all features:
 go run examples/cli-example.go
 ```
 
-### 🖥️ **CLI Commands**
+###  **CLI Commands**
 
 ```
 > help                          # Show all commands
@@ -257,13 +257,13 @@ go run examples/cli-example.go
 > info                         # Show current model info
 ```
 
-**💡 Try typing international characters - they just work!**
+** Try typing international characters - they just work!**
 
 ---
 
-## 📚 **Complete API Reference**
+##  **Complete API Reference**
 
-### 🏗️ **Connection Management**
+###  **Connection Management**
 
 ```go
 // Model-based (recommended)
@@ -277,7 +277,7 @@ display, err := govfd.Open(portName, options)
 display.Close()
 ```
 
-### ✍️ **Text Output**
+###  **Text Output**
 
 ```go
 // Smart encoding (recommended)
@@ -287,7 +287,7 @@ err := display.WriteText("Any UTF-8 text!")
 err := display.WriteRawBytes([]byte{0x48, 0x65, 0x6C, 0x6C, 0x6F})
 ```
 
-### 🎯 **Cursor & Screen**
+###  **Cursor & Screen**
 
 ```go
 // Positioning
@@ -299,7 +299,7 @@ err := display.Clear()        // Initialize display
 err := display.FormFeed()     // Clear screen content
 ```
 
-### 🎨 **Visual Settings**
+###  **Visual Settings**
 
 ```go
 // Brightness (1-4)
@@ -311,7 +311,7 @@ err := display.SetBlink(intervalMs)  // 0 = off
 interval := display.GetBlinkMs()
 ```
 
-### ℹ️ **Information & Diagnostics**
+### ℹ **Information & Diagnostics**
 
 ```go
 // Display info
@@ -328,27 +328,27 @@ protocols := govfd.GetSupportedProtocols()
 
 ---
 
-## 🏗️ **Architecture & Extending**
+##  **Architecture & Extending**
 
-### 📦 **Project Structure**
+###  **Project Structure**
 
 ```
 govfd/
-├── 📁 commands/escpos/     # ESC/POS protocol implementation
+├──  commands/escpos/       # ESC/POS protocol implementation
 │   ├── encoding.go         # 🧠 Smart encoding system :)
 │   ├── commands.go         # Command implementations
 │   ├── chartable.go        # Character set constants
-│   └── consts.go          # ESC/POS constants
-├── 📁 models/epson/        # Model-specific configurations
-├── 📁 types/              # Type definitions
-├── 📁 examples/           # Example applications
-├── govfd.go               # Main library interface
-├── display.go             # Display control functions
-├── models.go              # Model registry
-└── protocols.go           # Protocol interface
+│   └── consts.go           # ESC/POS constants
+├──  models/epson/          # Model-specific configurations
+├──  types/                 # Type definitions
+├──  examples/              # Example applications
+├── govfd.go                # Main library interface
+├── display.go              # Display control functions
+├── models.go               # Model registry
+└── protocols.go            # Protocol interface
 ```
 
-### 🔌 **Adding New Models**
+###  **Adding New Models**
 
 ```go
 // 1. Define model specification
@@ -370,7 +370,7 @@ var modelRegistry = map[types.Model]*ModelProfile{
 }
 ```
 
-### 🔧 **Custom Command Protocols**
+###  **Custom Command Protocols**
 
 Custom protocols dontr need to work only via serial, need to think better how i will implement that.
 
@@ -386,17 +386,17 @@ func (p *MyProtocol) Clear() []byte { /* implementation */ }
 
 ---
 
-## 🤝 **Contributing**
+##  **Contributing**
 
 We welcome contributions! Here's how to help:
 
-### 🐛 **Reporting Issues**
+###  **Reporting Issues**
 
 - Use GitHub Issues
 - Include model, OS, and code examples
 - Describe expected vs actual behavior
 
-### 🔧 **Contributing Code**
+###  **Contributing Code**
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -405,7 +405,7 @@ We welcome contributions! Here's how to help:
 5. Open Pull Request
 6. Huge Thanks! Its really hard come by new VFD's
 
-### 📋 **Development Setup**
+###  **Development Setup**
 
 ```bash
 git clone https://github.com/corrreia/govfd.git
@@ -417,7 +417,7 @@ go build ./...
 
 ---
 
-## 📜 **License**
+##  **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -425,10 +425,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-### 🚀 **Made with ❤️ for the Go community**
+### **Made with ❤️ for the Go community**
 
-**[📖 Documentation](https://pkg.go.dev/github.com/corrreia/govfd)** •
-**[🐛 Issues](https://github.com/corrreia/govfd/issues)** •
-**[💬 Discussions](https://github.com/corrreia/govfd/discussions)**
+**[ Documentation](https://pkg.go.dev/github.com/corrreia/govfd)** •
+**[ Issues](https://github.com/corrreia/govfd/issues)** •
+**[ Discussions](https://github.com/corrreia/govfd/discussions)**
 
 </div>
