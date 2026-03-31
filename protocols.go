@@ -15,7 +15,6 @@ type Protocol interface {
 	Clear() []byte                     // Initialize/clear display
 	FormFeed() []byte                  // Clear screen content
 	MoveCursor(column, row int) []byte // Move cursor to position (1-based)
-	WriteText(text string) []byte      // Write text at current position
 
 	// Display settings
 	SetBrightness(level int) []byte // Set brightness (1-4 typically)

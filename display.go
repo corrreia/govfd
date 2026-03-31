@@ -1,6 +1,10 @@
 package govfd
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/corrreia/govfd/commands/escpos"
+)
 
 // Clear sends ESC @ to initialize/clear the display state.
 func (d *Display) Clear() error {
@@ -19,14 +23,12 @@ func (d *Display) FormFeed() error {
 }
 
 // WriteText writes a string to the display at the current cursor position.
-// 🎯 FULLY AUTOMATIC: The system handles ALL character encoding automatically!
-// Just send any UTF-8 text and it works perfectly - zero configuration needed!
+// Character encoding is handled automatically — just send UTF-8 text.
 func (d *Display) WriteText(message string) error {
 	if d.protocol == nil {
 		return errors.New("no command protocol set")
 	}
 
-	// 🚀 SMART AUTO-ENCODING: Automatically handles charset selection and encoding
 	encodedBytes, err := d.smartEncodeText(message)
 	if err != nil {
 		return err
@@ -35,22 +37,18 @@ func (d *Display) WriteText(message string) error {
 	if err := d.writeBytes(encodedBytes); err != nil {
 		return err
 	}
+	// All encoding paths produce single-byte-per-character output,
+	// so len(encodedBytes) equals the display character count.
 	d.advanceCursorBy(len(encodedBytes))
 	return nil
 }
 
-// smartEncodeText is the magic function that handles everything automatically
+// smartEncodeText encodes UTF-8 text for the display's active charset,
+// switching charsets automatically when needed.
 func (d *Display) smartEncodeText(text string) ([]byte, error) {
 	if d.encoder == nil {
-		// Fallback if encoder not available
-		return []byte(text), nil
+		return escpos.SanitizeForDisplay(text), nil
 	}
-
-	// Let the encoder handle everything - it will automatically:
-	// 1. Try current charset
-	// 2. Auto-detect best charset for the text
-	// 3. Switch hardware charset if needed
-	// 4. Fall back to ASCII transliteration if needed
 	return d.encoder.EncodeTextWithAutoCharsetSwitching(text, d)
 }
 
@@ -92,9 +90,6 @@ func (d *Display) GetBrightness() int {
 // SetBlink sets the cursor blink period in milliseconds (0 to disable).
 // Device expects 50ms steps (n = ms / 50), sent as US E n (0x1F 0x45 n).
 func (d *Display) SetBlink(ms int) error {
-	if d == nil || d.port == nil {
-		return errors.New("display is not open")
-	}
 	if d.protocol == nil {
 		return errors.New("no command protocol set")
 	}
@@ -132,9 +127,9 @@ func (d *Display) SelfTest() error {
 	return d.writeBytes(d.protocol.SelfTest())
 }
 
-// SetCharacterCodeTableInternal selects the character code table page (INTERNAL USE ONLY).
-// This is now handled automatically by the smart encoding system.
-// This method implements the CharsetSwitcher interface.
+// SetCharacterCodeTableInternal selects the character code table page.
+// This implements the escpos.CharsetSwitcher interface and is called
+// automatically by the encoding system — do not call directly.
 func (d *Display) SetCharacterCodeTableInternal(page int) error {
 	if d.protocol == nil {
 		return errors.New("no command protocol set")
@@ -147,10 +142,12 @@ func (d *Display) SetCharacterCodeTableInternal(page int) error {
 		return errors.New("invalid charset page for this protocol")
 	}
 
-	// Update the character encoder's charset
+	// Write to hardware first — only update encoder if the write succeeds.
+	if err := d.writeBytes(cmd); err != nil {
+		return err
+	}
 	if d.encoder != nil {
 		d.encoder.SetCharset(page)
 	}
-
-	return d.writeBytes(cmd)
+	return nil
 }

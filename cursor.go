@@ -5,8 +5,8 @@ import "errors"
 // SetCursor moves the cursor to a 1-based position (column, row).
 // This uses the command sequence US $ n m.
 func (d *Display) SetCursor(column, row int) error {
-	if d.cursorColumn == column && d.cursorRow == row {
-		return nil
+	if d.protocol == nil {
+		return errors.New("no command protocol set")
 	}
 	if column < 1 || row < 1 {
 		return errors.New("column/row must be >= 1")
@@ -20,16 +20,19 @@ func (d *Display) SetCursor(column, row int) error {
 	if column > 255 || row > 255 {
 		return errors.New("column/row out of device range")
 	}
-	d.cursorColumn = column
-	d.cursorRow = row
-	if d.protocol == nil {
-		return errors.New("no command protocol set")
+	if d.cursorColumn == column && d.cursorRow == row {
+		return nil
 	}
 	cmd := d.protocol.MoveCursor(column, row)
 	if cmd == nil {
 		return errors.New("invalid cursor position for this protocol")
 	}
-	return d.writeBytes(cmd)
+	if err := d.writeBytes(cmd); err != nil {
+		return err
+	}
+	d.cursorColumn = column
+	d.cursorRow = row
+	return nil
 }
 
 // GetCursor returns the current cursor position.

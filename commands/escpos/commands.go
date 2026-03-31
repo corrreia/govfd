@@ -31,11 +31,6 @@ func (p *ESCPOSProtocol) MoveCursor(column, row int) []byte {
 	return BuildSetCursorSeq(byte(column), byte(row))
 }
 
-// WriteText returns the text as bytes (ESC/POS displays accept raw text).
-func (p *ESCPOSProtocol) WriteText(text string) []byte {
-	return []byte(text)
-}
-
 // SetBrightness returns the command sequence to set brightness level.
 func (p *ESCPOSProtocol) SetBrightness(level int) []byte {
 	if level < 1 || level > 4 {

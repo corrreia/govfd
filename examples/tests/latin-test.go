@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/corrreia/govfd"
+	"github.com/corrreia/govfd/types"
 )
 
 type TestResult struct {
@@ -46,7 +47,7 @@ func main() {
 	fmt.Println()
 
 	// Connect to VFD
-	display, err := govfd.OpenModel("epson-dmd110", "AUTO")
+	display, err := govfd.OpenModel("/dev/ttyUSB0", types.ModelEpsonDMD110)
 	if err != nil {
 		fmt.Printf("❌ Error opening display: %v\n", err)
 		return
@@ -108,7 +109,7 @@ func main() {
 		// Clear and send test text
 		display.Clear()
 		display.WriteText(fmt.Sprintf("%d: %s", i+1, test.category))
-		display.SetCursor(0, 1) // Second line
+		display.SetCursor(1, 2) // Second line
 		display.WriteText(test.text)
 
 		// Get user confirmation
